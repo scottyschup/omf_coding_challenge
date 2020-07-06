@@ -31,6 +31,10 @@ class PaymentsController < ApplicationController
     @loan = Loan.find(params[:loan_id])
   end
 
+  # This could also be done in the model, right before the create method is called,
+  # which would make testing a little less complicated. But since the only place
+  # it's needed right now is on `PaymentsController#create` actions, I put the
+  # helper method here.
   def format_datetime(attrs)
     attrs[:payment_date] = Time.at(attrs[:payment_date].to_i)
     attrs
