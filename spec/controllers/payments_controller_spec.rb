@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe PaymentsController, type: :controller do
   let(:loan) { Loan.create!(funded_amount: 100.0) }
-  let(:payment_data) { { amount: 50.00, payment_date: Time.now } }
-  let(:payment) { Payment.create!(**payment_data, loan_id: loan.id) }
+  let(:payment_req) { { amount: 50.00, payment_date: Time.now, loan_id: loan.id } }
+  let(:payment) { Payment.create!(**payment_req) }
 
   describe '#index' do
     it 'responds with a 200' do
@@ -14,6 +14,7 @@ RSpec.describe PaymentsController, type: :controller do
 
   describe '#show' do
     it 'responds with a 200' do
+      loan.payments << payment
       get :show, params: { loan_id: loan.id, id: payment.id }
       expect(response).to have_http_status(:ok)
     end
@@ -25,5 +26,11 @@ RSpec.describe PaymentsController, type: :controller do
       end
     end
   end
-end
 
+  describe '#create' do
+    it 'responds with a 201' do
+      post :create, params: { payment: payment_req, loan_id: loan.id }
+      expect(response).to have_http_status(:created)
+    end
+  end
+end

@@ -8,7 +8,8 @@ class Payment < ActiveRecord::Base
   private
 
   def amount_not_greater_than_outstanding_balance
-    return if amount <= loan.outstanding_balance
+    return errors.add(:loan, "must be associated") if !loan
+    return true if amount <= loan.outstanding_balance
     errors.add(:amount, "can't be larger than outstanding loan balance")
   end
 end
