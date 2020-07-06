@@ -37,6 +37,20 @@ A payment should not be able to be created that exceeds the outstanding balance 
 * add `outstanding_balance` method to `Loan`
 * add payment amount validation helper
 
+### Note about timestamp format
+The `PaymentsController#create` method expects the `payment_date` in the format
+of seconds since epoch. In Ruby, calling `#to_i` on a `Time` object returns the
+correct value, as in:
+```rb
+Time.now.to_i
+```
+
+In JavaScript, it's a little more complicated, but something like the following
+would work:
+```js
+Math.round(Date.now() / 1000)
+```
+
 ### Testing payment creation manually with cURL
 ```sh
 curl http://localhost:3000/loans/1/payments \
