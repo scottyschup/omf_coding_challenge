@@ -36,3 +36,11 @@ A payment should not be able to be created that exceeds the outstanding balance 
   * `show`
 * add `outstanding_balance` method to `Loan`
 * add payment amount validation helper
+
+### Testing payment creation manually with cURL
+```sh
+curl http://localhost:3000/loans/1/payments \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"payment":{"amount":2,"payment_date":"1594030692"}}'
+```
