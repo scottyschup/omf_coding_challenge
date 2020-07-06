@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe PaymentsController, type: :controller do
   let(:loan) { Loan.create!(funded_amount: 100.0) }
-  let(:payment_req) { { amount: 50.00, payment_date: Time.now, loan_id: loan.id } }
-  let(:payment) { Payment.create!(**payment_req) }
+  let(:payment_params) { { amount: 50.00, payment_date: Time.now.to_i, loan_id: loan.id } }
+  let(:payment) { Payment.create!(**payment_params.merge(payment_date: Time.now)) }
 
   describe '#index' do
     it 'responds with a 200' do
@@ -29,7 +29,7 @@ RSpec.describe PaymentsController, type: :controller do
 
   describe '#create' do
     it 'responds with a 201' do
-      post :create, params: { payment: payment_req, loan_id: loan.id }
+      post :create, params: { payment: payment_params, loan_id: loan.id }
       expect(response).to have_http_status(:created)
     end
   end

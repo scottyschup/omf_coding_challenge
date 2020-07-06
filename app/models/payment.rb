@@ -5,6 +5,11 @@ class Payment < ActiveRecord::Base
   validates :payment_date, presence: true
   validate :amount_not_greater_than_outstanding_balance
 
+  def create(params)
+    params[:payment_date] = Time.at(params[:payment_date])
+    super
+  end
+
   private
 
   def amount_not_greater_than_outstanding_balance

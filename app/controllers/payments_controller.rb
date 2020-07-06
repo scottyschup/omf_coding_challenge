@@ -10,7 +10,7 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    @payment = @loan.payments.build(payment_params)
+    @payment = @loan.payments.build(format_datetime(payment_params))
 
     if @payment.save
       render json: @payment, status: :created
@@ -29,5 +29,10 @@ class PaymentsController < ApplicationController
 
   def set_current_loan
     @loan = Loan.find(params[:loan_id])
+  end
+
+  def format_datetime(attrs)
+    attrs[:payment_date] = Time.at(attrs[:payment_date].to_i)
+    attrs
   end
 end
